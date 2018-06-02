@@ -1,0 +1,6 @@
+{
+  "python.linting.enabled": true,
+  "editor.renderWhitespace": "none",
+  "editor.insertSpaces": true,
+  "editor.tabSize": 4
+}

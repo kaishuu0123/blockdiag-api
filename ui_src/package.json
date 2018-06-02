@@ -1,0 +1,46 @@
+{
+  "name": "blockdiag-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --mode development --open --hot",
+    "build": "webpack --mode production --output ../static/js/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Koki Oyatsu",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.11",
+    "html-webpack-plugin": "^3.2.0",
+    "sass-loader": "^7.0.1",
+    "style-loader": "^0.21.0",
+    "uglifyjs-webpack-plugin": "^1.2.5",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.10.2",
+    "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-cli": "^2.1.4",
+    "webpack-dev-server": "^3.1.4"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bootstrap": "^4.1.1",
+    "codemirror": "^5.38.0",
+    "loaders.css": "^0.1.2",
+    "moment": "^2.22.2",
+    "react": "^16.4.0",
+    "react-codemirror2": "^5.0.4",
+    "react-dom": "^16.4.0",
+    "react-loaders": "^3.0.1",
+    "react-octicon": "^3.0.1",
+    "reactstrap": "^6.0.1",
+    "styled-components": "^3.3.0"
+  }
+}

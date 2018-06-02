@@ -1,0 +1,3 @@
+/lib/
+node_modules
+/ui_src/dist/*

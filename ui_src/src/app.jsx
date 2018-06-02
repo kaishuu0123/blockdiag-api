@@ -242,6 +242,7 @@ class App extends React.Component {
                     </Row>
                     <hr />
                     <footer className="container-fluid">
+                        <a href="https://github.com/kaishuu0123/blockdiag-api" target="_blank"><Octicon name="mark-github" /> source code</a><br />
                         © 2018 <a href="https://twitter.com/@kaishuu0123" target="_blank">@kaishuu0123</a> (Twitter)<br />
                         This work is based off <a href="http://blockdiag.com/" target="_blank">blockdiag</a>.
                     </footer>

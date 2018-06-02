@@ -11,6 +11,25 @@ $ docker-compose build app
 $ docker-compose up
 ```
 
+## API Reference
+
+* endpoint: /api/v1/<diagram type (actdiag or blockdiag ...)>
+* METHOD: POST
+* JSON
+    ```
+    {
+      "source": "<diagram syntax>"
+    }
+    ```
+
+### example curl command
+
+```
+$ curl -XPOST \
+  -d '{\n "source": "blockdiag {\n  A -> B; \n B-> C; \n}"' \
+  http://localhost:8000/api/v1/blockdiag
+```
+
 ## Development
 
 * python 3.6.5

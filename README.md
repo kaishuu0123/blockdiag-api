@@ -13,11 +13,11 @@ $ docker-compose up
 
 ## API Reference
 
-* endpoint: /api/v1/<diagram type (actdiag or blockdiag ...)>
-* http method: POST
-* http header: 'Content-Type: application/json;'
+* endpoint: `/api/v1/<diagram type (actdiag or blockdiag ...)>`
+* http method: `POST`
+* http header: `Content-Type: application/json;`
 * JSON payload
-    ```json
+    ```javascript
     {
       "source": "<diagram syntax>"
     }

@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  app:
+    build: .
+    working_dir: /app
+    command: python server.py
+    ports:
+      - 8001:8000
+    restart: always

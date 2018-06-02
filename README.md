@@ -6,7 +6,7 @@
 
 ## Use docker-compose
 
-```
+```shell
 $ docker-compose build app
 $ docker-compose up
 ```
@@ -14,21 +14,21 @@ $ docker-compose up
 ## API Reference
 
 * endpoint: /api/v1/<diagram type (actdiag or blockdiag ...)>
-* METHOD: POST
-* JSON
-    ```
+* http method: POST
+* http header: 'Content-Type: application/json;'
+* JSON payload
+    ```json
     {
       "source": "<diagram syntax>"
     }
     ```
-
-### example curl command
-
-```
-$ curl -XPOST \
-  -d '{\n "source": "blockdiag {\n  A -> B; \n B-> C; \n}"' \
-  http://localhost:8000/api/v1/blockdiag
-```
+* example curl command
+    ```shell
+    $ curl -XPOST \
+       -H 'Content-Type: application/json' \
+       -d '{ "source": "blockdiag {\n  A -> B; \n B -> C; \n}" }' \
+       http://localhost:8000/api/v1/blockdiag
+    ```
 
 ## Development
 
@@ -38,14 +38,14 @@ $ curl -XPOST \
 
 ### Server Side
 
-```
+```shell
 $ pip install -r requirements.txt
 $ python server.py
 ```
 
 ### Client Side
 
-```
+```shell
 $ cd ui-src
 $ npm install
 $ npm run start

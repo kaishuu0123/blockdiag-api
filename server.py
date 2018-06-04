@@ -2,9 +2,12 @@ import os
 import sys
 import traceback
 
+import base64
+import zlib
+
 from blockdiag.utils.fontmap import FontMap
 from sanic import Sanic
-from sanic.response import json, html, redirect
+from sanic.response import json, html, redirect, text
 from jinja2 import Environment, FileSystemLoader
 
 env = Environment(loader=FileSystemLoader('./templates', encoding='utf8'))
@@ -15,6 +18,9 @@ DIAGRAM_FORMAT = 'SVG'
 
 app.static('/static', './static')
 
+def inflate(data):
+    decoded_data = base64.urlsafe_b64decode(data)
+    return zlib.decompress(decoded_data, -zlib.MAX_WBITS)
 
 def create_fontmap():
     fontmap = FontMap(None)
@@ -43,81 +49,64 @@ def drawGraph(source, parser, builder, drawer):
 
     return image, etype, error
 
+@app.route("/api/v1/<diag_type>/inflate/<deflate_string>", methods=['GET'])
+async def get_handler(request, diag_type, deflate_string):
+    diags = ["actdiag", "blockdiag", "nwdiag", "packetdiag", "rackdiag", "seqdiag"]
+    etype = None
+    error = None
 
-@app.route("/api/v1/actdiag", methods=['POST'])
-async def actdiag_handler(request):
-    from actdiag import parser, builder, drawer
+    if diag_type not in diags:
+        return json(
+            dict(image=None, etype='invalid diag type', error=f'valid type: {diags}'),
+            status=400
+        )
+
+    diag_module = __import__(diag_type, fromlist=["parser", "builder", "drawer"])
+
+    try:
+        source_bytes = inflate(deflate_string)
+    except Exception as err:
+        etype = err.__class__.__name__
+        error = str(err)
+        return text(
+            f'error: {etype} {error}\ninput:\n{deflate_string}',
+            status=400
+        )
+
+    source = source_bytes.decode('utf-8')
+
+    image, etype, error = drawGraph(
+        source, diag_module.parser, diag_module.builder, diag_module.drawer)
+
+    if error is None:
+        return text(
+            image,
+            headers={'Content-Type': 'image/svg+xml'},
+            status=200
+        )
+    else:
+        return text(
+            f'error: {etype} {error}\nsource:\n{source}',
+            status=400
+        )
+
+@app.route("/api/v1/<diag_type>", methods=['POST'])
+async def post_handler(request, diag_type):
+    diags = ["actdiag", "blockdiag", "nwdiag", "packetdiag", "rackdiag", "seqdiag"]
+
+    if diag_type not in diags:
+        return json(
+            dict(image=None, etype='invalid diag type', error=f'valid type: {diags}'),
+            status=400
+        )
+
+    diag_module = __import__(diag_type, fromlist=["parser", "builder", "drawer"])
 
     etype = None
     error = None
 
     image, etype, error = drawGraph(
-        request.json["source"], parser, builder, drawer)
-
-    return json(
-        dict(image=image, etype=etype, error=error),
-        status=200 if error is None else 400
-    )
-
-
-@app.route("/api/v1/blockdiag", methods=['POST'])
-async def blockdiag_handler(request):
-    from blockdiag import parser, builder, drawer
-
-    image, etype, error = drawGraph(
-        request.json["source"], parser, builder, drawer)
-
-    return json(
-        dict(image=image, etype=etype, error=error),
-        status=200 if error is None else 400
-    )
-
-
-@app.route("/api/v1/nwdiag", methods=['POST'])
-async def nwdiag_handler(request):
-    from nwdiag import parser, builder, drawer
-
-    image, etype, error = drawGraph(
-        request.json["source"], parser, builder, drawer)
-
-    return json(
-        dict(image=image, etype=etype, error=error),
-        status=200 if error is None else 400
-    )
-
-
-@app.route("/api/v1/packetdiag", methods=['POST'])
-async def packetdiag_handler(request):
-    from packetdiag import parser, builder, drawer
-
-    image, etype, error = drawGraph(
-        request.json["source"], parser, builder, drawer)
-
-    return json(
-        dict(image=image, etype=etype, error=error),
-        status=200 if error is None else 400
-    )
-
-
-@app.route("/api/v1/rackdiag", methods=['POST'])
-async def rackdiag_handler(request):
-    from rackdiag import parser, builder, drawer
-
-    image, etype, error = drawGraph(
-        request.json["source"], parser, builder, drawer)
-
-    return json(
-        dict(image=image, etype=etype, error=error),
-        status=200 if error is None else 400
-    )
-
-
-@app.route("/api/v1/seqdiag", methods=['POST'])
-async def seqdiag_handler(request):
-    from seqdiag import parser, builder, drawer
-
-    image, etype, error = drawGraph(
-        request.json["source"], parser, builder, drawer)
+        request.json["source"], diag_module.parser, diag_module.builder, diag_module.drawer)
 
     return json(
         dict(image=image, etype=etype, error=error),

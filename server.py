@@ -23,6 +23,7 @@ def gen_svg_error_image(etype, error, message):
     svg_header = '''
     <svg xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="600px" height="300px"
      >
      <text x="10" y="10" font-size="16" dy="0">
     '''

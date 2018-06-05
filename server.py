@@ -18,6 +18,29 @@ DIAGRAM_FORMAT = 'SVG'
 
 app.static('/static', './static')
 
+def gen_svg_error_image(etype, error, message):
+    import textwrap
+    svg_header = '''
+    <svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     >
+     <text x="10" y="10" font-size="16" dy="0">
+    '''
+    svg_footer = '''
+      </text>
+    </svg>
+    '''
+
+    svg = svg_header
+    svg += f'<tspan x="10" dy="1.2em">ErrorType: {etype}</tspan>'
+    svg += f'<tspan x="10" dy="1.2em">ErrorMessage: {error}</tspan>'
+    svg += f'<tspan x="10" dy="1.2em">Source:</tspan>'
+    for m in message.splitlines():
+        svg += f'<tspan x="10" dy="1.2em" xml:space="preserve">{m}</tspan>'
+    svg += svg_footer
+
+    return svg
+
 def inflate(data):
     decoded_data = base64.urlsafe_b64decode(data)
     return zlib.decompress(decoded_data, -zlib.MAX_WBITS)
@@ -69,7 +92,8 @@ async def get_handler(request, diag_type, deflate_string):
         etype = err.__class__.__name__
         error = str(err)
         return text(
-            f'error: {etype} {error}\ninput:\n{deflate_string}',
+            gen_svg_error_image(etype, error, deflate_string),
+            headers={'Content-Type': 'image/svg+xml'},
             status=400
         )
 
@@ -86,7 +110,8 @@ async def get_handler(request, diag_type, deflate_string):
         )
     else:
         return text(
-            f'error: {etype} {error}\nsource:\n{source}',
+            gen_svg_error_image(etype, error, source),
+            headers={'Content-Type': 'image/svg+xml'},
             status=400
         )
 

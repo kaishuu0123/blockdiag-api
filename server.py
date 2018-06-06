@@ -5,6 +5,8 @@ import traceback
 import base64
 import zlib
 
+from html import escape
+
 from blockdiag.utils.fontmap import FontMap
 from sanic import Sanic
 from sanic.response import json, html, redirect, text
@@ -32,11 +34,15 @@ def gen_svg_error_image(etype, error, message):
     </svg>
     '''
 
+    escaped_etype = escape(etype)
+    escaped_error = escape(error)
+    escaped_message = escape(message)
+
     svg = svg_header
-    svg += f'<tspan x="10" dy="1.2em">ErrorType: {etype}</tspan>'
-    svg += f'<tspan x="10" dy="1.2em">ErrorMessage: {error}</tspan>'
+    svg += f'<tspan x="10" dy="1.2em">ErrorType: {escaped_etype}</tspan>'
+    svg += f'<tspan x="10" dy="1.2em">ErrorMessage: {escaped_error}</tspan>'
     svg += f'<tspan x="10" dy="1.2em">Source:</tspan>'
-    for m in message.splitlines():
+    for m in escaped_message.splitlines():
         svg += f'<tspan x="10" dy="1.2em" xml:space="preserve">{m}</tspan>'
     svg += svg_footer
 

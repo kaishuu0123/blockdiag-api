@@ -2,7 +2,7 @@
 
 ## Demo
 
-* https://blockdiag-api.saino.me/
+* https://blockdiag-api.com/
 
 ## Use docker-compose
 

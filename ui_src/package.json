@@ -37,7 +37,7 @@
     "moment": "^2.22.2",
     "react": "^16.4.0",
     "react-codemirror2": "^5.0.4",
-    "react-dom": "^16.4.0",
+    "react-dom": "^16.4.2",
     "react-loaders": "^3.0.1",
     "react-octicon": "^3.0.1",
     "reactstrap": "^6.0.1",

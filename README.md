@@ -30,6 +30,27 @@ $ docker-compose up
        http://localhost:8000/api/v1/blockdiag
     ```
 
+## Change URL prefix
+
+Please set `BLOCKDIAG_API_SUBDIR` environment variable.
+
+```
+BLOCKDIAG_API_SUBDIR=/hello python server.py
+```
+
+or
+
+Edit `docker-compose.yml`
+
+```diff
+-    environment:
+-    - BLOCKDIAG_API_SUBDIR=/
++    environment:
++    - BLOCKDIAG_API_SUBDIR=/hello
+```
+
+Access to `http://<blockdiag-api URL>/hello`
+
 ## Development
 
 * python 3.6.5

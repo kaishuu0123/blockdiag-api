@@ -9,12 +9,15 @@ from html import escape
 
 from blockdiag.utils.fontmap import FontMap
 from sanic import Sanic
+from sanic import Blueprint
 from sanic.response import json, html, redirect, text
 from jinja2 import Environment, FileSystemLoader
 
 env = Environment(loader=FileSystemLoader('./templates', encoding='utf8'))
 
 app = Sanic()
+
+bp = Blueprint('blockdiag_api')
 
 DIAGRAM_FORMAT = 'SVG'
 
@@ -79,7 +82,7 @@ def drawGraph(source, parser, builder, drawer):
 
     return image, etype, error
 
-@app.route("/api/v1/<diag_type>/inflate/<deflate_string>", methods=['GET'])
+@bp.route("/api/v1/<diag_type>/inflate/<deflate_string>", methods=['GET'])
 async def get_handler(request, diag_type, deflate_string):
     diags = ["actdiag", "blockdiag", "nwdiag", "packetdiag", "rackdiag", "seqdiag"]
     etype = None
@@ -122,7 +125,7 @@ async def get_handler(request, diag_type, deflate_string):
             status=400
         )
 
-@app.route("/api/v1/<diag_type>", methods=['POST'])
+@bp.route("/api/v1/<diag_type>", methods=['POST'])
 async def post_handler(request, diag_type):
     diags = ["actdiag", "blockdiag", "nwdiag", "packetdiag", "rackdiag", "seqdiag"]
 
@@ -146,15 +149,21 @@ async def post_handler(request, diag_type):
     )
 
 
-@app.route("/ui")
+@bp.route("/ui")
 async def ui_handler(request):
     tpl = env.get_template('index.html')
     return html(tpl.render())
 
 
-@app.route("/")
+@bp.route("/")
 async def root_handler(request):
-    return redirect('/ui')
+    url = request.app.url_for('blockdiag_api.ui_handler')
+    return redirect(url)
+
+if os.getenv('BLOCKDIAG_API_SUBDIR'):
+    app.blueprint(bp, url_prefix=os.getenv('BLOCKDIAG_API_SUBDIR'))
+else:
+    app.blueprint(bp)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)

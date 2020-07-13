@@ -14,7 +14,7 @@ nwdiag==1.0.4
 Pillow==6.2.0
 pycodestyle==2.4.0
 pylint==1.9.1
-sanic==0.7.0
+sanic==20.6.3
 seqdiag==0.9.5
 six==1.11.0
 ujson==1.35

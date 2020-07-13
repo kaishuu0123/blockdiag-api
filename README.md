@@ -44,9 +44,9 @@ Edit `docker-compose.yml`
 
 ```diff
 -    environment:
--    - BLOCKDIAG_API_SUBDIR="/"
+-    - BLOCKDIAG_API_SUBDIR=/
 +    environment:
-+    - BLOCKDIAG_API_SUBDIR="/hello"
++    - BLOCKDIAG_API_SUBDIR=/hello
 ```
 
 Access to `http://<blockdiag-api URL>/hello`

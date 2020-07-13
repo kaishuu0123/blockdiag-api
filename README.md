@@ -1,5 +1,8 @@
 # blockdiag-api
 
+[![GitHub release](https://img.shields.io/github/release/kaishuu0123/blockdiag-api.svg)][releases]
+[![Docker Pulls](https://img.shields.io/docker/pulls/kaishuu0123/blockdiag-api.svg)][docker]
+
 ## Demo
 
 * https://blockdiag-api.com/

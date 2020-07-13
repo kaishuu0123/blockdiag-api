@@ -95,7 +95,7 @@ class App extends React.Component {
             isRendererd: false,
         });
 
-		axios.post(`/api/v1/${this.state.diagramType}`, {
+		axios.post(`api/v1/${this.state.diagramType}`, {
 			source: this.state.source
 		}).then(res => {
             this.setState({

@@ -8,8 +8,14 @@
   </head>
   <body>
     <div id="index"></div>
+    {% if url_prefix %}
+    <script type="text/javascript" src="{{ url_prefix }}/static/js/index.js"></script>
+    <script type="text/javascript" src="{{ url_prefix }}/static/js/main.js"></script>
+    <script type="text/javascript" src="{{ url_prefix }}/static/js/vendor.js"></script>
+    {% else %}
     <script type="text/javascript" src="/static/js/index.js"></script>
     <script type="text/javascript" src="/static/js/main.js"></script>
     <script type="text/javascript" src="/static/js/vendor.js"></script>
+    {% endif %}
   </body>
 </html>

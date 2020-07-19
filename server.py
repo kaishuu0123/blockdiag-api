@@ -19,9 +19,9 @@ app = Sanic()
 
 bp = Blueprint('blockdiag_api')
 
-DIAGRAM_FORMAT = 'SVG'
+bp.static('/static', './static')
 
-app.static('/static', './static')
+DIAGRAM_FORMAT = 'SVG'
 
 def gen_svg_error_image(etype, error, message):
     import textwrap
@@ -152,7 +152,7 @@ async def post_handler(request, diag_type):
 @bp.route("/ui")
 async def ui_handler(request):
     tpl = env.get_template('index.html')
-    return html(tpl.render())
+    return html(tpl.render(url_prefix=os.getenv('BLOCKDIAG_API_SUBDIR')))
 
 
 @bp.route("/")

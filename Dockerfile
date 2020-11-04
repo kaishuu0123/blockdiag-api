@@ -2,7 +2,9 @@ FROM python:3.6.5-alpine
 
 ADD . /app
 
-ENV BLOCKDIAG_API_SUBDIR=/
+# example:
+# ENV BLOCKDIAG_API_SUBDIR=/subdomain
+ENV BLOCKDIAG_API_SUBDIR=
 
 WORKDIR /app
 RUN apk add --update gcc linux-headers build-base zlib-dev jpeg-dev && rm -rf /var/cache/apk/*
